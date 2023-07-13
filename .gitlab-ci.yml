@@ -22,10 +22,10 @@ update-a-file-in-a-repository:
     - sudo apt-get install python3-pip -y
     - pip3 install -r requirements.txt
   script:
-    - python3 update-input-manifest.py ${GITLAB_BRANCH_TO_UPDATE}
+    - python3 update-file-in-repo.py ${GITLAB_BRANCH_TO_UPDATE}
 
-run-playbooks:
-  extends: .default
-  stage: run-playbooks
-  script:
-    - ansible-playbook site.yml -e ansible_host=${TARGET_SITE}  --vault-password-file=$(echo ${FILE_PATH} | base64 --decode) --extra-vars BRANCH_NAME=${GITLAB_BRANCH_TO_UPDATE}
+# run-playbooks:
+#   extends: .default
+#   stage: run-playbooks
+#   script:
+#     - ansible-playbook site.yml -e ansible_host=${TARGET_SITE}  --vault-password-file=$(echo ${FILE_PATH} | base64 --decode) --extra-vars BRANCH_NAME=${GITLAB_BRANCH_TO_UPDATE}
