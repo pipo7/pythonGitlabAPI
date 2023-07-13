@@ -1,0 +1,2 @@
+python-gitlab==3.14.0
+ruamel.yaml==0.17.32
