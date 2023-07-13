@@ -1,0 +1,31 @@
+
+# stages
+stages:
+
+  - update-a-file-in-a-repository
+
+ 
+# default settings that can be overriden at job level
+.default:
+  tags:
+    - my-runner-tag
+  only:
+    - branches
+  except:
+    - tags
+  interruptible: true
+
+update-a-file-in-a-repository:
+  extends: .default
+  stage: update-a-file-in-a-repository
+  before_script:
+    - sudo apt-get install python3-pip -y
+    - pip3 install -r requirements.txt
+  script:
+    - python3 update-input-manifest.py ${GITLAB_BRANCH_TO_UPDATE}
+
+run-playbooks:
+  extends: .default
+  stage: run-playbooks
+  script:
+    - ansible-playbook site.yml -e ansible_host=${TARGET_SITE}  --vault-password-file=$(echo ${FILE_PATH} | base64 --decode) --extra-vars BRANCH_NAME=${GITLAB_BRANCH_TO_UPDATE}
